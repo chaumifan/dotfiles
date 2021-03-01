@@ -2,7 +2,7 @@
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
 # Path to your oh-my-zsh installation.
-export ZSH="/home/ir/.oh-my-zsh"
+export ZSH="$HOME/dotfiles/zsh/plugins/oh-my-zsh"
 
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
@@ -125,7 +125,8 @@ corona() {
     echo March $((($(date +%s)-$(date +%s --date "2020-03-01"))/(3600*24)))
 }
 
-source ~/.work.zsh
+# Enable for workspace specific settings
+# source ~/.work.zsh
 
 export FZF_DEFAULT_COMMAND='rg --files --no-ignore-vcs --hidden'
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh

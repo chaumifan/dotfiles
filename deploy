@@ -56,6 +56,8 @@ echo "2. Check to make sure you have zsh, vim, and tmux installed"
 echo "3. We'll help you install them if you don't"
 echo "4. We're going to check to see if your default shell is zsh"
 echo "5. We'll try to change it if it's not" 
+echo "6. We'll add a .gitconfig file with the given configs"
+echo "7. We'll fix up anything remaining"
 
 echo "Let's get started? (y/n)"
 old_stty_cfg=$(stty -g)
@@ -96,6 +98,15 @@ fi
 printf "source '$HOME/dotfiles/zsh/zshrc_manager.sh'" > ~/.zshrc
 printf "so $HOME/dotfiles/vim/vimrc.vim" > ~/.vimrc
 printf "source-file $HOME/dotfiles/tmux/tmux.conf" > ~/.tmux.conf
+
+echo "Setting git configs"
+touch ~/.gitconfig
+echo "[include]" >> ~/.gitconfig
+echo "    path = ~/dotfiles/git/git.conf" >> ~/.gitconfig
+
+echo "Setting up gruvbox to work"
+mkdir -p ~/.vim/colors
+cp ~/dotfiles/vim/bundle/gruvbox/colors/gruvbox.vim ~/.vim/colors
 
 echo
 echo "Please log out and log back in for default shell to be initialized."

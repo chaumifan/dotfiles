@@ -1,4 +1,5 @@
 set nocompatible
+source ~/dotfiles/vim/bundle/vim-pathogen/autoload/pathogen.vim
 let mapleader = " "
 
 """ Plugins
