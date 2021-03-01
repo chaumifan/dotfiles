@@ -3,7 +3,7 @@ source ~/dotfiles/vim/bundle/vim-pathogen/autoload/pathogen.vim
 let mapleader = " "
 
 """ Plugins
-execute pathogen#infect()
+execute pathogen#infect('~/dotfiles/vim/bundle/{}')
 
 " Ctrlp use rg
 set runtimepath^=~/.vim/bundle/ctrlp.vim

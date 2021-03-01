@@ -73,9 +73,12 @@ plugins=(
     jira
     jsontools
     vi-mode
+    golang
 )
 
 source $ZSH/oh-my-zsh.sh
+source ~/dotfiles/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
+source ~/dotfiles/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
 # User configuration
 
@@ -85,11 +88,11 @@ source $ZSH/oh-my-zsh.sh
 # export LANG=en_US.UTF-8
 
 # Preferred editor for local and remote sessions
-# if [[ -n $SSH_CONNECTION ]]; then
-#   export EDITOR='vim'
-# else
-#   export EDITOR='mvim'
-# fi
+if [[ -n $SSH_CONNECTION ]]; then
+  export EDITOR='vim'
+else
+  export EDITOR='mvim'
+fi
 
 # Compilation flags
 # export ARCHFLAGS="-arch x86_64"
@@ -100,10 +103,12 @@ source $ZSH/oh-my-zsh.sh
 # For a full list of active aliases, run `alias`.
 
 alias vi=vim
-alias vimconf="vim ~/.vimrc"
-alias zshconf="vim ~/.zshrc"
-alias tmuxconf="vim ~/.tmux.conf"
-alias al="vim ~/.zshrc; source ~/.zshrc"
+alias vimconf="vim ~/dotfiles/vim/vimrc.vim"
+alias zshconf="vim ~/dotfiles/zsh/zshrc.sh"
+alias tmuxconf="vim ~/dotfiles/tmux/tmux.conf"
+alias gitconf="vim ~/dotfiles/git/git.conf"
+alias al="vim ~/dotfiles/zsh/zshrc.sh; source ~/dotfiles/zsh/zshrc.sh"
+
 alias groot='cd $(git rev-parse --show-toplevel)'
 
 
