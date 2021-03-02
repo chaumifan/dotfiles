@@ -107,9 +107,10 @@ alias vimconf="vim ~/dotfiles/vim/vimrc.vim"
 alias zshconf="vim ~/dotfiles/zsh/zshrc.sh"
 alias tmuxconf="vim ~/dotfiles/tmux/tmux.conf"
 alias gitconf="vim ~/dotfiles/git/git.conf"
-alias al="vim ~/dotfiles/zsh/zshrc.sh; source ~/dotfiles/zsh/zshrc.sh"
+alias al="zshconf"
 
 alias groot='cd $(git rev-parse --show-toplevel)'
+alias gcob="git checkout -b"
 
 
 # Cycle through history based on characters already typed on the line
