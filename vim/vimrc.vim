@@ -51,9 +51,25 @@ let g:go_metalinter_autosave = 1
 let g:go_metalinter_autosave_enabled = ['vet', 'golint']
 let g:go_metalinter_deadline = "5s"
 
-" turn to next or previous errors, after open location list
-nmap <leader>j :lnext<CR>
-nmap <leader>k :lprevious<CR>
+" turn to next or previous errors, after open location or quickfix list
+function! NextListItem()
+    if get(getloclist(0, {'winid':0}), 'winid', 0)
+        execute ":lnext"
+    else
+        execute ":cn"
+    endif
+endfunction
+
+function! PrevListItem()
+    if get(getloclist(0, {'winid':0}), 'winid', 0)
+        execute ":lprev"
+    else
+        execute ":cp"
+    endif
+endfunction
+
+nmap <silent><leader>j :call NextListItem()<CR>
+nmap <silent><leader>k :call PrevListItem()<CR>
 
 " let g:go_autodetect_gopath = 0
 " autocmd BufWritePost *.go :silent GoBuild
@@ -172,14 +188,6 @@ endif
 " ctags, C-\ open in new tab, Alt-] open in vertical split
 map <C-\> :tab split<CR>:exec("tag ".expand("<cword>"))<CR>
 map <A-]> :vsp <CR>:exec("tag ".expand("<cword>"))<CR>
-
-" Open quickfix list automatically after using vimgrep
-augroup myvimrc
-    autocmd!
-    autocmd FileType qf wincmd J " Open quickfix list as entire horizontal split
-    autocmd QuickFixCmdPost [^l]* cwindow
-    autocmd QuickFixCmdPost l*    lwindow
-augroup END
 
 " Fold settings
 set foldmethod=indent
