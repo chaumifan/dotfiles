@@ -79,6 +79,7 @@ plugins=(
 source $ZSH/oh-my-zsh.sh
 source ~/dotfiles/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
 source ~/dotfiles/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+source ~/dotfiles/zsh/prompt.sh
 
 # User configuration
 
@@ -124,7 +125,7 @@ bindkey "$key[Down]" down-line-or-beginning-search
 # ignore duplicates when searching history
 setopt HIST_FIND_NO_DUPS
 
-# Add sebastian paths
+# Add random binary paths
 export PATH=$PATH:~/bin
 
 corona() {
@@ -132,7 +133,7 @@ corona() {
 }
 
 # Enable for workspace specific settings
-# source ~/.work.zsh
+source ~/.work.zsh
 
 export FZF_DEFAULT_COMMAND='rg --files --no-ignore-vcs --hidden'
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh

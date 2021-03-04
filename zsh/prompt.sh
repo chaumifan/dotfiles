@@ -1,62 +1,40 @@
-# Reference for colors: http://stackoverflow.com/questions/689765/how-can-i-change-the-color-of-my-prompt-in-zsh-different-from-normal-text
-
-autoload -U colors && colors
-
-setopt PROMPT_SUBST
-
-set_prompt() {
-
-	# [
-	PS1="%{$fg[white]%}[%{$reset_color%}"
-
-	# Path: http://stevelosh.com/blog/2010/02/my-extravagant-zsh-prompt/
-	PS1+="%{$fg_bold[cyan]%}${PWD/#$HOME/~}%{$reset_color%}"
-
-	# Status Code
-	PS1+='%(?.., %{$fg[red]%}%?%{$reset_color%})'
-
- 	# Git
- 	if git rev-parse --is-inside-work-tree 2> /dev/null | grep -q 'true' ; then
- 		PS1+=', '
- 		PS1+="%{$fg[blue]%}$(git rev-parse --abbrev-ref HEAD 2> /dev/null)%{$reset_color%}"
-		STATUS=$(git status --short | wc -l)
-		if [ $STATUS -gt 0 ]; then 
- 			PS1+="%{$fg[red]%}+$(echo $STATUS | awk '{$1=$1};1')%{$reset_color%}"
- 		fi
- 	fi
-
-
-	# Timer: http://stackoverflow.com/questions/2704635/is-there-a-way-to-find-the-running-time-of-the-last-executed-command-in-the-shel
-	if [[ $_elapsed[-1] -ne 0 ]]; then
-		PS1+=', '
-		PS1+="%{$fg[magenta]%}$_elapsed[-1]s%{$reset_color%}"
-	fi
-
-	# PID
-	if [[ $! -ne 0 ]]; then
-		PS1+=', '
-		PS1+="%{$fg[yellow]%}PID:$!%{$reset_color%}"
-	fi
-
-	# Sudo: https://superuser.com/questions/195781/sudo-is-there-a-command-to-check-if-i-have-sudo-and-or-how-much-time-is-left
-	CAN_I_RUN_SUDO=$(sudo -n uptime 2>&1|grep "load"|wc -l)
-	if [ ${CAN_I_RUN_SUDO} -gt 0 ]
-	then
-		PS1+=', '
-		PS1+="%{$fg_bold[red]%}SUDO%{$reset_color%}"
-	fi
-
-	PS1+="%{$fg[white]%}]: %{$reset_color%}% "
+# Print non-zero exit code
+# https://zenbro.github.io/2015/07/23/show-exit-code-of-last-command-in-zsh
+function check_last_exit_code() {
+  local LAST_EXIT_CODE=$?
+  if [[ $LAST_EXIT_CODE -ne 0 ]]; then
+    local EXIT_CODE_PROMPT=' '
+    EXIT_CODE_PROMPT+="%{$fg[red]%}-%{$reset_color%}"
+    EXIT_CODE_PROMPT+="%{$fg_bold[red]%}$LAST_EXIT_CODE%{$reset_color%}"
+    EXIT_CODE_PROMPT+="%{$fg[red]%}-%{$reset_color%}"
+    echo "$EXIT_CODE_PROMPT"
+  fi
 }
 
-precmd_functions+=set_prompt
-
-preexec () {
-   (( ${#_elapsed[@]} > 1000 )) && _elapsed=(${_elapsed[@]: -1000})
-   _start=$SECONDS
+# Print out time for command to run in ms
+# https://gist.github.com/knadh/123bca5cfdae8645db750bfb49cb44b0#gistcomment-3424463
+function preexec() {
+  timer=$(date +%s%3N)
 }
 
-precmd () {
-   (( _start >= 0 )) && _elapsed+=($(( SECONDS-_start )))
-   _start=-1 
+function precmd() {
+  if [ $timer ]; then
+    local now=$(date +%s%3N)
+    local d_ms=$(($now-$timer))
+    local d_s=$((d_ms / 1000))
+    local ms=$((d_ms % 1000))
+    local s=$((d_s % 60))
+    local m=$(((d_s / 60) % 60))
+    local h=$((d_s / 3600))
+    if ((h > 0)); then elapsed=${h}h${m}m
+    elif ((m > 0)); then elapsed=${m}m${s}s
+    elif ((s >= 10)); then elapsed=${s}.$((ms / 100))s
+    elif ((s > 0)); then elapsed=${s}.$((ms / 10))s
+    else elapsed=${ms}ms
+    fi
+
+    RPROMPT='$(check_last_exit_code) %F{cyan}${elapsed} %{$reset_color%}'
+    export RPROMPT
+    unset timer
+  fi
 }
