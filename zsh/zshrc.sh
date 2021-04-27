@@ -127,6 +127,7 @@ setopt HIST_FIND_NO_DUPS
 
 # Add random binary paths
 export PATH=$PATH:~/bin
+export PATH=$PATH:~/dotfiles/bin
 
 corona() {
     echo March $((($(date +%s)-$(date +%s --date "2020-03-01"))/(3600*24)))
