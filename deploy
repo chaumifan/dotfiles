@@ -103,5 +103,23 @@ touch ~/.gitconfig
 echo "[include]" >> ~/.gitconfig
 echo "    path = ~/dotfiles/git/git.conf" >> ~/.gitconfig
 
+git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
+~/.fzf/install
+
+echo "Are you running Debian/Ubuntu? (y/n)"
+old_stty_cfg=$(stty -g)
+stty raw -echo
+answer=$( while ! head -c 1 | grep -i '[ny]' ;do true ;done )
+stty $old_stty_cfg
+if echo "$answer" | grep -iq "^y" ;then
+	echo
+    curl -LO https://github.com/BurntSushi/ripgrep/releases/download/12.1.1/ripgrep_12.1.1_amd64.deb
+    sudo dpkg -i ripgrep_12.1.1_amd64.deb
+
+else
+	echo "Quitting, nothing was changed."
+	exit 0
+fi
+
 echo
 echo "Please log out and log back in for default shell to be initialized."
